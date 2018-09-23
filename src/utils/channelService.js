@@ -1,4 +1,4 @@
-var Postoffice = function() {
+var ChannelService = function() {
     let messageBuffer = [];
     const channelPidMap = {};
     const delay = 500;
@@ -69,20 +69,17 @@ var Postoffice = function() {
         const startTime = Date.now();
         let timeDiff = 0;
         let index = 0;
-        while((index > messageBuffer.length) &&
+        while((index < messageBuffer.length) &&
               (timeDiff <= delay)) {
             const obj = messageBuffer[index];
             if (callbackExists(obj.msg, obj.pid)) {
                 //change the array
+                //TODO a faster performance can be achieved by using a linked list
                 messageBuffer = messageBuffer.slice(0, index).concat(messageBuffer.slice(index + 1, messageBuffer.length));
-            } else {
-                //do nothing to the array
             }
             index ++;
         }
     }
 };
 
-var postoffice = new Postoffice();
-
-module.exports = postoffice;
+module.exports = new ChannelService();
